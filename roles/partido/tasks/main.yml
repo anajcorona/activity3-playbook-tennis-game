@@ -1,0 +1,29 @@
+#SPDX-License-Identifier: MIT-0
+# tasks file for partido
+---
+- name: Obtener datos del segundo tenista desde la API
+  uri:
+    url: "https://randomuser.me/api/?results=1"
+    return_content: yes
+  register: json
+
+- name: Establecer variables del segundo tenista
+  set_fact:
+    second_first_name: "{{ (json.content | from_json)['results'][0]['name']['first'] }}"
+    second_last_name: "{{ (json.content | from_json)['results'][0]['name']['last'] }}"
+    second_city: "{{ (json.content | from_json)['results'][0]['location']['city'] }}"
+    second_id: "{{ (json.content | from_json)['results'][0]['id']['value'] }}"
+
+- name: Generar el archivo partido.txt con toda la información
+  template:
+    src: partido.j2
+    dest: /vagrant/partido.txt
+
+- name: Mostrar el contenido del archivo en pantalla
+  command: cat /vagrant/partido.txt
+  register: contenido
+
+- name: Visualizar en terminal el contenido
+  debug:
+    var: contenido.stdout
+

@@ -1,0 +1,10 @@
+---
+- name: Generar partido de tenis con datos
+  hosts: all
+  gather_facts: yes
+  roles:
+    - role: partido
+      vars:
+        first_name: "Aitor"
+        last_name: "Menta"
+        city: "Madrid"
